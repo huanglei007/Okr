@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Okr个人中心</title>
+    <style>
+        body {
+            width: 100%;
+            margin: 0;
+            background-color: #ECEFF3;
+        }
+
+        #Up {
+            width: 100%;
+            height: 60px;
+            background: #4A90E2;
+            color: #FFFFFF;
+        }
+
+        #Up a {
+            text-decoration: none;
+            color: #FFFFFF;
+            margin-right: 5px;
+        }
+
+        .id {
+            height: 60px;
+            line-height: 60px;
+            float: right;
+            margin-right: 20%;
+            margin-top: 5px;
+        }
+
+        .okr {
+            height: 60px;
+            line-height: 60px;
+            float: left;
+            margin-left: 20%;
+            font-size: 30px;
+        }
+
+        .img1 {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #D8D8D8;
+            margin-left: 10px;
+            margin-top: 5px;
+        }
+
+        .img2 {
+            margin-top: 6px;
+            margin-left: 9px;
+            width: 23px;
+            height: 26px;
+        }
+
+
+        #Middle {
+            width: auto;
+            height: 250px;
+            /* border: 1px solid red; */
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .head {
+            width: 60%;
+            height: 250px;
+            /* border: 1px solid red; */
+            border-radius: 4px;
+            margin: 0 auto;
+        }
+
+        .ha {
+            background-color: #9B9B9B;
+            height: 60%
+        }
+
+        .hc {
+            width: 140px;
+            height: 140px;
+            background-color: #D8D8D8;
+            position: absolute;
+            top: 70px;
+            margin-left: 30px;
+            border-radius: 4px;
+        }
+
+        .hb {
+            background-color: #FFFFFF;
+            height: 40%;
+        }
+
+        .hd {
+            margin-left: 13px;
+            margin-top: 5px;
+        }
+
+        .he {
+            font-size: 20px;
+            margin-left: 200px;
+        }
+
+        .hf {
+            height: 30px;
+            float: right;
+            margin-right: 50px;
+            margin-top: -60px;
+            border-radius: 4px;
+            background-color: #FFFFFF;
+            border: 1px solid #4A90E2;
+        }
+
+
+
+        #Lower {
+            width: auto;
+            height: auto;
+            /* border: 1px solid blue; */
+            margin-top: 10px;
+        }
+
+        .body {
+            width: 33%;
+            height: 380px;
+            /* border: 1px solid red; */
+            margin-left: 20%;
+            background-color: #FFFFFF;
+            border-radius: 4px;
+        }
+
+        .ba {
+            height: 30px;
+            line-height: 30px;
+            width: 30px;
+            border-bottom: 3px solid #4A90E2;
+            margin-left: 10px;
+            padding-top: 10px;
+        }
+
+        .body p{
+            width: auto;
+            height: 10px;
+            line-height: 45px;
+            margin-left: 10px;
+            border-bottom: 1px solid #F3F3F3;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div id="Up">
+        <div class="okr">Okr</div>
+        <div class="id">
+            <div class="img1"><img src="/1.png" class="img2"></div>
+        </div>
+    </div>
+
+    <div id="Middle">
+        <div class="head">
+            <div class="ha">
+                <div class="hc"><img src="{{user.avatar}}" class="hd"></div>
+            </div>
+            <div class="hb">
+                <div class="he">{{user.username}}</div>
+            </div>
+            <button class="hf">编辑个人资料</button>
+        </div>
+    </div>
+
+
+    <div id="Lower">
+        <div class="body">
+            <div class="ba">Okr</div>
+            <div>
+                <p>发表了Okr</p>
+                <br>
+                <p>AAAAAAAAAAAAAAA</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
