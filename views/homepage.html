@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Okr列表</title>
     <style>
+        input{
+            outline: none;
+        }
         a {
             cursor: pointer;
             text-decoration:underline ;
@@ -122,12 +125,6 @@
             margin-top: 5px;
         }
 
-        /* .img2 {
-            margin-top: 6px;
-            margin-left: 9px;
-            width: 23px;
-            height: 26px;
-        } */
 
         .img3 {
             margin-top: -1%;
@@ -213,7 +210,6 @@
             BORDER-RIGHT-STYLE: none;
             BORDER-LEFT-STYLE: none;
             BORDER-BOTTOM-STYLE: 1px solid #DCDCDC;
-            outline: none;
         }
 
         .sinput1 {
@@ -331,6 +327,7 @@
     </div>
 
     <div id="down">
+            <a href="">{{ username }}</a>
         <div class="Release">
             <div class="Release1">
                 <form action="/api/OKR" method="POST">
@@ -384,7 +381,7 @@
             <form action="/api/register" method="POST">
                 <div><input name="phone" class="sinput" type="text" placeholder="手机号或邮箱" autocomplete="off"></div>
                 <div><input name="password" class="sinput" type="text" placeholder="请输入你的密码" autocomplete="off"></div>
-                <div><input name="code" class="sinput1" type="text" placeholder="请输入6位数的验证码" autocomplete="off"></div>
+                <div><input name="" class="sinput1" type="text" placeholder="请输入6位数的验证码" autocomplete="off"></div>
                 <a class="huoqu">获取验证码</a>
                 <div class="sb2">注册</div>
                 <input type="submit" value="注册">

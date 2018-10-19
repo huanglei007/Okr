@@ -7,6 +7,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Okr详情</title>
     <style>
+        div{
+            border-radius: 4px;
+        }
+        input {
+            outline: none;
+        }
+
+        a {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
         body {
             width: 100%;
             margin: 0;
@@ -57,22 +69,29 @@
 
         .A {
             width: 600px;
-            height: 250px;
+            height: auto;
             background-color: #FFFFFF;
             float: right;
             margin-right: 20px;
+            /* border: 1px solid red; */
+            background-color: #F3F3F3;
         }
 
         .a {
             height: 20%;
+            background-color: #FFFFFF;
+            position: relative;
         }
 
         .b {
-            height: 60%;
-            padding-left: 10px;
+            width: auto;
+            height: auto;
+            margin-top: 0px;
+            background-color: #FFFFFF;
         }
 
         .c {
+            margin-top: 50px;
             height: 20%;
         }
 
@@ -85,16 +104,14 @@
             margin-top: 5px;
         }
 
-        .img2 {
-            margin-top: 6px;
-            margin-left: 9px;
-            width: 23px;
-            height: 26px;
-        }
 
         .img3 {
-            margin-top: 15px;
-            margin-left: 10px;
+            margin-top: -1%;
+            margin-left: 1.5%;
+        }
+
+        .img4 {
+            margin-left: 1%;
         }
 
 
@@ -124,14 +141,9 @@
             margin-left: 10px;
         }
 
-        .comment {
-            width: 60px;
-            height: 35px;
-            border-radius: 2px;
-            border: 1px solid #DBDBDB;
-        }
 
         .More {
+            /* background-color: red; */
             width: 600px;
             height: 50px;
             line-height: 50px;
@@ -141,6 +153,8 @@
         }
 
         .word {
+            height: auto;
+            width: 600px;
             margin-top: 10px;
             margin-bottom: 10px;
             margin-left: 10px;
@@ -218,7 +232,6 @@
             BORDER-RIGHT-STYLE: none;
             BORDER-LEFT-STYLE: none;
             BORDER-BOTTOM-STYLE: 1px solid #DCDCDC;
-            outline: none;
         }
 
         .sinput1 {
@@ -317,6 +330,59 @@
         .null {
             display: none;
         }
+
+        .O,
+        .K{
+            margin-top: 10px;
+            width: 590px;
+            height: 100%;
+            background-color: #FFFFFF;
+            padding-left: 10px;
+            padding-top: 5px;
+        }
+        .R{
+            margin-top: 10px;
+            padding-left: 10px;
+            width: 590px;
+            height: 200px;
+            background-color: #FFFFFF;
+        }    
+
+
+
+        .kai {
+            bottom: 5px;
+            right: 5px;
+        }
+
+        .extend {
+            height:40px;
+        }
+        .axa{
+            font-size: 15px;
+            margin-left:550px;
+        }
+        .O1{
+            margin-top: 10px;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .K1{
+            margin-top: 10px;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .R1{
+            margin-top: 10px;
+            overflow: hidden;
+            display: inline-block;
+            
+        }
+        .aname{
+            position:absolute;
+            bottom: 10px;
+            left: 55px;
+        }
     </style>
 </head>
 
@@ -335,32 +401,62 @@
         <div class="left">
             <div class="A">
                 <div class="a">
-                    <div class="img1"><img src="/1.png" class="img2"></div>
+                    <img class="img1">
+                    <!-- {% for item in details %} -->
+                    <a class="aname" target="_blank">{{ item.username }}</a>
+                    <span style="float:right;margin-top: 3%;margin-right: 1%;">{{ item.created_at }}</span>
                 </div>
-                <div class="b">{{内容}}
-                    <ul>
-                        {% for item in Details %}
-                        <li>{{ item.object }}</li>
-                        {% endfor %}
-                    </ul>
+                <div class="b">
+                    <span class="" style="margin-left:10px;">{{ item.object }}</span>
+                    <span class="">{{ item.key_results }}</span>
+                    <span class="">{{ item.action }}</span>
+                    <!-- {% endfor %} -->
+                    <div class="c"><img src="/3.png" class="img3"></div>
+                </div>
 
+                <div class="O">
+                    <div class="O1 extend">
+                            {{ item.object }}</div>
+                    <div class="axa">
+                        <a class="kaiO">展开</a>
+                    </div>
                 </div>
-                <div class="c"><img src="/3.png" class="img3"></div>
+                <div class="K">
+                    <div class="K1 extend">{{ item.key_results }}</div>
+                    <div class="axa">
+                        <a class="kaiK">展开</a>
+                    </div>
+                </div>
+                <div class="R">
+                    <div class="R1">{{ item.action }}</div>
+                </div>
             </div>
+
             <div class="B">
                 <div class="PL">评论()</div>
-                <input class="input">
-                <button class="comment">评论</button>
-                <br/>
-                <div class="word">{{留言}}</div>
-                <a><div class="More">查看更多</div></a>
+                <form action="/api/comment" method="POST">
+                    <div><input name="comment" class="input" type="text" placeholder="请输入你的评论内容……" autocomplete="off"></div>
+                    <div><input type="submit" value="评论"></div>
+                </form>
+                <div class="word">
+                    {% for detail in details %}
+                    <div></div>
+                    <div>
+                        <img class="img1">
+                        <a href="/Details/{{details.id}}" target="_blank">{{details.username}}</a>
+                    </div>
+                    <div style="margin-left:10px;">{{ details.content }}</div>
+                </div>
+                {% endfor %}
+                <div class="More"><a>查看更多</a></div>
             </div>
         </div>
+    </div>
 
-        <div class="right">
-            <div class="C"><b>相关内容</b></div>
-            <div class="Related">123</div>
-        </div>
+    <div class="right">
+        <div class="C"><b>相关内容</b></div>
+        <div class="Related">123</div>
+    </div>
     </div>
 
     <div id="hidebg" class="null"></div>
@@ -369,25 +465,25 @@
             <div class="sa1">登录<img src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4"
                     class="close1"></div>
             <form action="/api/login" method="POST">
-                <div><input class="sinput" type="text" placeholder="手机号或邮箱"></div>
-                <div><input class="sinput" type="text" placeholder="密码" autocomplete="off"></div>
+                <div><input class="sinput" type="text" name="phone" placeholder="手机号或邮箱"></div>
+                <div><input class="sinput" type="text" name="password" placeholder="密码" autocomplete="off"></div>
                 <a class="wang" href="">忘记密码?</a>
                 <div class="sa2">登录</div>
                 <input type="submit" value="登录">
-                <div class="sadown">没有账号? <a href="">注册</a></div>
+                <div class="sadown">没有账号? <a class="id2">注册</a></div>
             </form>
         </div>
         <div id="sb" class="null">
             <div class="sb1">注册<img src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4"
                     class="close2"></div>
             <form action="/api/register" method="POST">
-                <div><input class="sinput" type="text" placeholder="手机号或邮箱"></div>
-                <div><input class="sinput" type="text" placeholder="请输入你的密码"></div>
-                <div><input class="sinput1" type="text" placeholder="请输入6位数的验证码"></div>
+                <div><input class="sinput" type="text" name="phone" placeholder="手机号或邮箱"></div>
+                <div><input class="sinput" type="text" name="password" placeholder="请输入你的密码"></div>
+                <div><input class="sinput1" type="text" name="code" placeholder="请输入6位数的验证码"></div>
                 <a class="huoqu">获取验证码</a>
                 <div class="sb2">注册</div>
                 <input type="submit" value="注册">
-                <div class="sbdown">没有账号? <a href="">注册</a></div>
+                <div class="sbdown">没有账号? <a class="id1">登录</a></div>
             </form>
         </div>
     </div>
@@ -397,15 +493,13 @@
         $('.id1').click(function () {
             $('#hidebg').removeClass("null")
             $('#sa').removeClass("null")
-
+            $('#sb').addClass("null")
         })
-
         $('.id2').click(function () {
             $('#hidebg').removeClass("null")
             $('#sb').removeClass("null")
-
+            $('#sa').addClass("null")
         })
-
 
 
         $('.close1').click(function () {
@@ -415,6 +509,48 @@
         $('.close2').click(function () {
             $('#hidebg').addClass("null")
             $('#sb').addClass("null")
+        })
+
+//---------------------------------------------
+//---------------------------------------------
+
+        $('.kaiO').click(function () {
+            $('.O1').toggleClass('extend')
+
+            var shouqi = $(this).text();
+            if (shouqi == '展开') {
+                $(this).text('收起')
+            }
+
+            else {
+                $(this).text('展开')
+            }
+        })
+        
+        $('.kaiK').click(function () {
+            $('.K1').toggleClass('extend')
+
+            var shouqi = $(this).text();
+            if (shouqi == '展开') {
+                $(this).text('收起')
+            }
+
+            else {
+                $(this).text('展开')
+            }
+        })
+        
+        $('.kaiR').click(function () {
+            $('.R1').toggleClass('extend')
+
+            var shouqi = $(this).text();
+            if (shouqi == '展开') {
+                $(this).text('收起')
+            }
+
+            else {
+                $(this).text('展开')
+            }
         })
     </script>
 </body>

@@ -177,11 +177,11 @@
     <div id="Lower">
         <div class="body">
             <div class="ba">Okr</div>
+            {% for item in items %}
             <div>
-                <p>发表了Okr</p>
-                <br>
-                <p>AAAAAAAAAAAAAAA</p>
+                {{ item.okr }}
             </div>
+            {% endfor %}
         </div>
     </div>
 </body>
