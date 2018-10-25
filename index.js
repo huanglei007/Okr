@@ -8,7 +8,7 @@ var moment = require('moment')
 var connection = mysql.createConnection({
     host: '192.168.0.110',
     user: 'root',
-    password: ' ',
+    password: '88888888',
     database: 'okr'
 })
 connection.connect();
@@ -21,6 +21,7 @@ nunjucks.configure('views', {
 })
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
 
 
 
@@ -28,7 +29,6 @@ app.get('/', function (req, res) {
     // res.cookie("test", "value")
 
     connection.query('select *,(select username from user where user.id = okr.user_id) as username from okr', function (err, data) {
-
         // console.log('data: ', data);
         // var username = req.cookies.username;
         res.render('HomePage.html', { items: data });
@@ -63,10 +63,7 @@ app.post('/api/register', function (req, res) {
     var username = phone.substr(0, 3) + "****" + phone.substr(7);
     var created_at = moment().format('YYYY-MM-DD HH:mm:ss');
 
-    // var code = req.body.code;
-    
-
-    connection.query('insert into user values (null, ?, ?, ?, "", "", ?)', [phone, password, username, created_at], function (err, data) {
+    connection.query('insert into user values (null, ?, ?, ?, "", "", ?)', [phone, password, username, created_at], function(err, data){
         res.send('注册成功')
     })
 
