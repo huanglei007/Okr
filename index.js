@@ -112,7 +112,7 @@ app.get('/api/homepage', function (req, res) {
 });
 
 
-app.get('/api/details/:id', function (req, res) {
+app.get('/api/details?id=', function (req, res) {
     var okr_id = req.params.id;
     console.log(okr_id)
     connection.query(`select *,
@@ -123,13 +123,13 @@ app.get('/api/details/:id', function (req, res) {
         });
 });
 
-app.get('/api/user', function (req, res) {
-    var id = req.params.id;
-    connection.query('select * from user where id=? limit 1', [id], function (err, data) {
-        // console.log('data: ', data);
-        res.json(data)
-    });
-});
+// app.get('/api/user', function (req, res) {
+//     var id = req.params.id;
+//     connection.query('select * from user where id=? limit 1', [id], function (err, data) {
+//         // console.log('data: ', data);
+//         res.json(data)
+//     });
+// });
 
 app.get('/api/comments', function (req, res) {
     var okr_id = req.query.okr_id;

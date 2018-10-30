@@ -399,55 +399,57 @@
 
     <div id="down">
         <div class="left">
-            <div class="A">
+            <div class="A" id="details"></div>
+            <script type="template" id="template">
+                {{#details}}
                 <div class="a">
                     <img class="img1">
-                    <!-- {% for item in details %} -->
-                    <a class="aname" target="_blank">{{ item.username }}</a>
-                    <span style="float:right;margin-top: 3%;margin-right: 1%;">{{ item.created_at }}</span>
+    
+                    <a class="aname" target="_blank">{{ username }}</a>
+                    <span style="float:right;margin-top: 3%;margin-right: 1%;">{{ created_at }}</span>
                 </div>
                 <div class="b">
-                    <span class="" style="margin-left:10px;">{{ item.object }}</span>
-                    <span class="">{{ item.key_results }}</span>
-                    <span class="">{{ item.action }}</span>
-                    <!-- {% endfor %} -->
+                    <span class="" style="margin-left:10px;">{{ object }}</span>
+                    <span class="">{{ key_results }}</span>
+                    <span class="">{{ action }}</span>
                     <div class="c"><img src="/3.png" class="img3"></div>
                 </div>
-
+    
                 <div class="O">
                     <div class="O1 extend">
-                            {{ item.object }}</div>
+                            {{ object }}</div>
                     <div class="axa">
                         <a class="kaiO">展开</a>
                     </div>
                 </div>
                 <div class="K">
-                    <div class="K1 extend">{{ item.key_results }}</div>
+                    <div class="K1 extend">{{ key_results }}</div>
                     <div class="axa">
                         <a class="kaiK">展开</a>
                     </div>
                 </div>
                 <div class="R">
-                    <div class="R1">{{ item.action }}</div>
+                    <div class="R1">{{ action }}</div>
                 </div>
-            </div>
-
+                {{/details}}
+            </script>
             <div class="B">
                 <div class="PL">评论()</div>
                 <form action="/api/comment" method="POST">
                     <div><input name="comment" class="input" type="text" placeholder="请输入你的评论内容……" autocomplete="off"></div>
                     <div><input type="submit" value="评论"></div>
                 </form>
-                <div class="word">
-                    {% for detail in details %}
+                <div class="word" id="comments"></div>
+                <script type="template" id="template">
+                    {{#comments}}
                     <div></div>
                     <div>
                         <img class="img1">
-                        <a href="/Details/{{details.id}}" target="_blank">{{details.username}}</a>
+                        <a href="/Details/{{ id }}" target="_blank">{{ username }}</a>
                     </div>
-                    <div style="margin-left:10px;">{{ details.content }}</div>
-                </div>
-                {% endfor %}
+                    <div style="margin-left:10px;">{{ content }}</div>
+                    {{/comments}}
+                </script>
                 <div class="More"><a>查看更多</a></div>
             </div>
         </div>
@@ -490,6 +492,7 @@
 
 
     <script type='text/javascript'>
+
         $('.id1').click(function () {
             $('#hidebg').removeClass("null")
             $('#sa').removeClass("null")
@@ -551,6 +554,39 @@
             else {
                 $(this).text('展开')
             }
+        })
+    
+    
+    
+        var $t = $('#template');
+        var tContent = $t.text();
+
+        function getQueryFromUrl(key, url) {
+            url = url.replace('?', '');
+            var arr = url.split('&');
+
+            var queryObj = {};
+
+            for (var i = 0; i < arr.length; i++) {
+                var el = arr[i];
+                var elArr = el.split('=');
+                queryObj[elArr[0]] = elArr[1];
+            }
+
+            return queryObj[key]
+        }
+
+        var id = getQueryFromUrl('id', window.location.search);
+
+        $.get('/api/details?id=' + id, function (res) {
+            var html = Mustache.render(tContent, res);
+            console.log(html);
+            $('#details').append(html);
+        })
+        $.get('/api/comments', function (res) {
+            var html = Mustache.render(tContent, res);
+            console.log(html);
+            $('#comments').append(html);
         })
     </script>
 </body>
