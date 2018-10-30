@@ -26,26 +26,12 @@ app.use(cookieParser())
 
 
 app.get('/', function (req, res) {
-    // res.cookie("test", "value")
-
-    connection.query('select *,(select username from user where user.id = okr.user_id) as username from okr', function (err, data) {
-        // console.log('data: ', data);
-        // var username = req.cookies.username;
-        res.render('HomePage.html', { items: data });
-    })
-
+        res.render('HomePage.html');
 })
 
-
-
-// app.get('/Details/:id', function (req, res) {
-//     var id = req.params.id;
-//     connection.query('select *,(select username from user where user.id = okr.user_id) as username from okr where id=? limit 1', [id], function (err, data) {
-//         // console.log('data: ', data);
-//         res.cookie('okr_id',id)
-//         res.render('Details.html', { details: data })
-//     });
-// })
+app.get('/Details/:id', function (req, res) {
+        res.render('Details.html', { details: data })
+})
 
 
 // app.get('/user/:id', function (req, res) {
@@ -111,6 +97,52 @@ app.post('/api/register', function (req, res) {
 //     })
 // })
 
+
+app.get('/api/homepage', function (req, res) {
+    res.cookie("test", "value");
+    var page = req.query.page || 1;
+    var size = 10;
+    connection.query(`select *,
+                    (select username from user where user.id = okr.user_id) as username,
+                    (select avatar from user where user.id = okr.user_id) as avatar
+                    from okr limit ?, ?`, [(page - 1) * size, size], function (err, data) {
+            var username = req.cookies.username;
+            res.json({okr:data});
+        })
+});
+
+
+app.get('/api/details/:id', function (req, res) {
+    var okr_id = req.params.id;
+    console.log(okr_id)
+    connection.query(`select *,
+                    (select username from user where id=okr.user_id) as username,
+                    (select avatar from user where user.id = okr.user_id) as avatar 
+                    from okr where id=?`, [okr_id], function (err, data) {
+            res.json(data);
+        });
+});
+
+app.get('/api/user', function (req, res) {
+    var id = req.params.id;
+    connection.query('select * from user where id=? limit 1', [id], function (err, data) {
+        // console.log('data: ', data);
+        res.json(data)
+    });
+});
+
+app.get('/api/comments', function (req, res) {
+    var okr_id = req.query.okr_id;
+    var page = req.query.page || 1;
+    var size = 10;
+
+    connection.query(`select *,
+                    (select username from user where user.id=comment.user_id) as username,
+                    (select avatar from user where user.id=comment.user_id) as avatar
+                    from comment where okr_id=? limit ?, ?`, [okr_id, (page - 1) * size, size], function (err, data) {
+            res.json(data);
+        })
+});
 
 
 
