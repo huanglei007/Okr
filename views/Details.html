@@ -388,6 +388,7 @@
 
 <body>
     <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/mustache.js/2.3.0/mustache.min.js"></script>
 
     <div id="up">
         <div class="Okr">Okr</div>
@@ -399,40 +400,8 @@
 
     <div id="down">
         <div class="left">
-            <div class="A" id="details"></div>
-            <script type="template" id="template">
-                {{#details}}
-                <div class="a">
-                    <img class="img1">
-    
-                    <a class="aname" target="_blank">{{ username }}</a>
-                    <span style="float:right;margin-top: 3%;margin-right: 1%;">{{ created_at }}</span>
-                </div>
-                <div class="b">
-                    <span class="" style="margin-left:10px;">{{ object }}</span>
-                    <span class="">{{ key_results }}</span>
-                    <span class="">{{ action }}</span>
-                    <div class="c"><img src="/3.png" class="img3"></div>
-                </div>
-    
-                <div class="O">
-                    <div class="O1 extend">
-                            {{ object }}</div>
-                    <div class="axa">
-                        <a class="kaiO">展开</a>
-                    </div>
-                </div>
-                <div class="K">
-                    <div class="K1 extend">{{ key_results }}</div>
-                    <div class="axa">
-                        <a class="kaiK">展开</a>
-                    </div>
-                </div>
-                <div class="R">
-                    <div class="R1">{{ action }}</div>
-                </div>
-                {{/details}}
-            </script>
+            <div class="A" id="details">
+            </div>
             <div class="B">
                 <div class="PL">评论()</div>
                 <form action="/api/comment" method="POST">
@@ -440,20 +409,60 @@
                     <div><input type="submit" value="评论"></div>
                 </form>
                 <div class="word" id="comments"></div>
-                <script type="template" id="template">
-                    {{#comments}}
-                    <div></div>
-                    <div>
-                        <img class="img1">
-                        <a href="/Details/{{ id }}" target="_blank">{{ username }}</a>
-                    </div>
-                    <div style="margin-left:10px;">{{ content }}</div>
-                    {{/comments}}
-                </script>
                 <div class="More"><a>查看更多</a></div>
             </div>
         </div>
     </div>
+
+
+    {% raw %}
+    <script type="template" id="template">
+    {{#details}}
+        <div class="a">
+            <img class="img1">
+            <a class="aname" target="_blank">{{username}}</a>
+            <span style="float:right;margin-top: 3%;margin-right: 1%;">{{created_at}}</span>
+        </div>
+        <div class="b">
+            <span class="" style="margin-left:10px;">{{object}}</span>
+            <span class="">{{key_results}}</span>
+            <span class="">{{action}}</span>
+            <div class="c"><img src="/3.png" class="img3"></div>
+        </div>
+        <div class="O">
+            <div class="O1 extend">
+                    {{object}}</div>
+            <div class="axa">
+                <a class="kaiO">展开</a>
+            </div>
+        </div>
+        <div class="K">
+            <div class="K1 extend">{{key_results}}</div>
+            <div class="axa">
+                <a class="kaiK">展开</a>
+            </div>
+        </div>
+        <div class="R">
+            <div class="R1">{{action}}</div>
+        </div>
+    {{/details}}
+    </script>
+    {% endraw %}
+
+    {% raw %}
+    <script type="template" id="template">
+    {{#comments}}
+        <div></div>
+        <div>
+            <img class="img1">
+            <a href="/Details/{{id}}" target="_blank">{{username}}</a>
+        </div>
+        <div style="margin-left:10px;">{{content}}</div>
+    {{/comments}}
+    </script>
+    {% endraw %}
+
+
 
     <div class="right">
         <div class="C"><b>相关内容</b></div>
@@ -555,40 +564,29 @@
                 $(this).text('展开')
             }
         })
-    
-    
-    
-        var $t = $('#template');
+ 
+    </script>
+
+    <script>
+     var $t = $('#template');
         var tContent = $t.text();
-
         function getQueryFromUrl(key, url) {
-            url = url.replace('?', '');
-            var arr = url.split('&');
-
-            var queryObj = {};
-
-            for (var i = 0; i < arr.length; i++) {
-                var el = arr[i];
-                var elArr = el.split('=');
-                queryObj[elArr[0]] = elArr[1];
-            }
-
-            return queryObj[key]
+            var arr = url.split('/');
+            var queryObj = arr[4];
+            return queryObj;
         }
 
-        var id = getQueryFromUrl('id', window.location.search);
+        var id = getQueryFromUrl('id', window.location.href);
 
-        $.get('/api/details?id=' + id, function (res) {
-            var html = Mustache.render(tContent, res);
-            console.log(html);
+        $.get('/api/details/' + id, function (res) {
+            var html = Mustache.render(tContent, {details:res});
             $('#details').append(html);
         })
-        $.get('/api/comments', function (res) {
-            var html = Mustache.render(tContent, res);
-            console.log(html);
+
+        $.get('/api/comments/' + id, function (res) {
+            var html = Mustache.render(tContent, {comments:res});
             $('#comments').append(html);
         })
     </script>
 </body>
-
 </html>

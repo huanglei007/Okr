@@ -356,14 +356,16 @@
         <div class="A">
                 <div class="a">
                     <img class="img1">
-                    <a href="/api/user/:{{id}}" target="_blank">{{username}}</a>
+                    <a href="/user/:{{id}}" target="_blank">{{username}}</a>
                     <span style="float:right;margin-top: 3%;margin-right: 1%;">{{created_at}}</span>
                 </div>
-                <div class="b" href="/api/details/:{{id}}">
+                <a  href="/details/{{id}}" style="text-decoration : none; color:black" >
+                <div class="b">
                     <div>{{key_results}}</div>
                     <div>{{object}}</div>
                     <div>{{action}}</div>
                 </div>
+                </a>
                 <div class="c"><img src="/3.png" class="img3"><img src="/4.png" class="img4"></div>
             </div>       
         {{/okr}}
@@ -392,15 +394,14 @@
         <div id="sb" class="null">
             <div class="sb1">注册<img src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4"
                     class="close2"></div>
-            <form action="/api/register" method="POST">
-                <div><input name="phone" class="sinput" type="text" placeholder="手机号或邮箱" autocomplete="off"></div>
-                <div><input name="password" class="sinput" type="text" placeholder="请输入你的密码" autocomplete="off"></div>
-                <div><input name="" class="sinput1" type="text" placeholder="请输入6位数的验证码" autocomplete="off"></div>
-                <a class="huoqu">获取验证码</a>
+            <div><input name="phone" class="sinput" id="phone" type="text" placeholder="手机号或邮箱" autocomplete="off"></div>
+            <div><input name="password" class="sinput" id="password" type="text" placeholder="请输入你的密码" autocomplete="off"></div>
+            <div><input name="" class="sinput1" id="" type="text" placeholder="请输入6位数的验证码" autocomplete="off"></div>
+            <a class="huoqu">获取验证码</a>
+            <a>
                 <div class="sb2">注册</div>
-                <input type="submit" value="注册">
-                <div class="sbdown">已有账号? <a class="id1">登录</a></div>
-            </form>
+            </a>
+            <div class="sbdown">已有账号? <a class="id1">登录</a></div>
         </div>
     </div>
 
@@ -433,9 +434,41 @@
 
         $.get('/api/homepage', function (res) {
             var html = Mustache.render(tContent, res);
-            console.log(html);
             $('#okr').append(html);
         })
+    </script>
+    <script>
+
+        $('.sb2').click(function () {
+            var phone = $('#phone').val();
+            var password = $('#password').val();
+            // if (phone.length == 0) {
+            //     $("#phone").tips({ msg: "请输入用户名。" });
+            //     return;
+            // }
+            // if (password.length == 0) {
+            //     $("#password").tips({ msg: "请输入密码。" });
+            //     return;
+            // }
+            $.ajax({
+                type: "POST",  //提交方式  
+                url: "/api/register",//路径  
+                dataType: "text",
+                data: {phone: phone,password: password},//数据，这里使用的是Json格式进行传输  
+
+                success: function (data) {//返回数据根据结果进行相应的处理  
+                    if (data == "注册成功") {
+                        window.location.href = "http://localhost:3000/"
+                    } else {
+                        alert("对不起,用户名或密码已被占用");
+                    }
+                }
+            });
+            console.log(phone,password)
+        })
+
+
+
     </script>
 </body>
 

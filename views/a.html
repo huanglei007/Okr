@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/mustache.js/2.3.0/mustache.min.js"></script>
+    123
+    <script>
+
+
+        var $t = $('#template');
+        var tContent = $t.text();
+        function getQueryFromUrl(key, url) {
+            var arr = url.split('/');
+            var queryObj = arr[4];
+            console.log(queryObj)
+            return queryObj;
+        }
+
+        var id = getQueryFromUrl('id', window.location.href);
+
+        $.get('/api/details/' + id, function (res) {
+            var html = Mustache.render(tContent, res);
+            console.log(html);
+            $('#details').append(html);
+        })
+    </script>
+</body>
+
+</html>
