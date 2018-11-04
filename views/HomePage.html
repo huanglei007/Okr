@@ -318,6 +318,8 @@
         .fabu {
             margin-top: 8%;
             margin-left: 2%;
+            background-color:#4A90E2;
+            width: 40px;
         }
     </style>
 </head>
@@ -338,13 +340,14 @@
         <a href="">{{ username }}</a>
         <div class="Release">
             <div class="Release1">
-                <form action="/api/OKR" method="POST">
-                    <div style="margin-top:10px;"><b>给自己定个小目标把</b></div>
-                    <div class="Thing">o:<input type="text" name="O" id="input" placeholder="请输入你的内容……" autocomplete="off"></div>
-                    <div class="Thing">K:<input type="text" name="K" id="input" placeholder="请输入你的内容……" autocomplete="off"></div>
-                    <div class="Thing">R:<input type="text" name="R" id="input" placeholder="请输入你的内容……" autocomplete="off"></div>
-                    <input class="fabu" type="submit" value="发布">
-                </form>
+
+                <div style="margin-top:10px;"><b>给自己定个小目标把</b></div>
+                <div class="Thing">o:<input type="text" name="O" id="input" class="O" placeholder="请输入你的内容……" autocomplete="off"></div>
+                <div class="Thing">K:<input type="text" name="K" id="input" class="K" placeholder="请输入你的内容……" autocomplete="off"></div>
+                <div class="Thing">R:<input type="text" name="R" id="input" class="R" placeholder="请输入你的内容……" autocomplete="off"></div>
+                <a style="text-decoration:none ;">
+                    <div class="fabu">发布</div>
+                </a>
             </div>
         </div>
 
@@ -382,14 +385,14 @@
         <div id="sa" class="null">
             <div class="sa1">登录<img src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4"
                     class="close1"></div>
-            <form action="/api/login" method="POST">
-                <div><input name="phone" class="sinput" type="text" placeholder="手机号或邮箱"></div>
-                <div><input name="password" class="sinput" type="text" placeholder="密码" autocomplete="off"></div>
-                <a class="wang" href="">忘记密码?</a>
+            <div><input name="phone" id="loginphone" class="sinput" type="text" placeholder="手机号或邮箱"></div>
+            <div><input name="password" id="loginword" class="sinput" type="text" placeholder="密码" autocomplete="off"></div>
+            <a class="wang" href="">忘记密码?</a>
+            <a>
                 <div class="sa2">登录</div>
-                <input type="submit" value="登录">
-                <div class="sadown">没有账号? <a class="id2">注册</a></div>
-            </form>
+            </a>
+            <input type="submit" value="登录">
+            <div class="sadown">没有账号? <a class="id2">注册</a></div>
         </div>
         <div id="sb" class="null">
             <div class="sb1">注册<img src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4"
@@ -437,38 +440,75 @@
             $('#okr').append(html);
         })
     </script>
+    
     <script>
 
         $('.sb2').click(function () {
             var phone = $('#phone').val();
             var password = $('#password').val();
-            // if (phone.length == 0) {
-            //     $("#phone").tips({ msg: "请输入用户名。" });
-            //     return;
-            // }
-            // if (password.length == 0) {
-            //     $("#password").tips({ msg: "请输入密码。" });
-            //     return;
-            // }
+
             $.ajax({
                 type: "POST",  //提交方式  
                 url: "/api/register",//路径  
                 dataType: "text",
-                data: {phone: phone,password: password},//数据，这里使用的是Json格式进行传输  
+                data: { phone: phone, password: password },//数据，这里使用的是Json格式进行传输  
 
                 success: function (data) {//返回数据根据结果进行相应的处理  
                     if (data == "注册成功") {
-                        window.location.href = "http://localhost:3000/"
+                        alert("注册成功")
+                        // window.location.href = "http://localhost:3000/"
                     } else {
                         alert("对不起,用户名或密码已被占用");
                     }
                 }
             });
-            console.log(phone,password)
+
         })
 
+        $('.sa2').click(function () {
+            var phone = $('#loginphone').val();
+            var password = $('#loginword').val();
 
+            $.ajax({
+                type: "POST",  //提交方式  
+                url: "/api/login",//路径  
+                dataType: "text",
+                data: { phone: phone, password: password },//数据，这里使用的是Json格式进行传输  
 
+                success: function (data) {//返回数据根据结果进行相应的处理  
+                    if (data == "登录成功") {
+                        alert("登录成功")
+                        // window.location.href = "http://localhost:3000/"
+                    } else {
+                        alert("对不起,用户名或密码错误");
+                    }
+                }
+            });
+
+        })
+
+        $('.fabu').click(function () {
+            var O = $('.O').val();
+            var K = $('.K').val();
+            var R = $('.R').val();
+            console.log(O,K,R);
+            $.ajax({
+                type: "POST",  //提交方式  
+                url: "/api/OKR",//路径  
+                dataType: "text",
+                data: { O: O, K: K, R:R },//数据，这里使用的是Json格式进行传输  
+
+                success: function (data) {//返回数据根据结果进行相应的处理  
+                    if (data == "发布成功") {
+                        alert('发布成功')
+                        // window.location.href = "http://localhost:3000/"
+                    } else {
+                        alert("对不起,用户名或密码错误");
+                    }
+                }
+            });
+
+        })
     </script>
 </body>
 

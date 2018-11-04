@@ -52,7 +52,7 @@ app.post('/api/register', function (req, res) {
     var created_at = moment().format('YYYY-MM-DD HH:mm:ss');
 
     connection.query('select * fromm user where phone=? and password=? limit 1', [phone, password], function (err, data) {
-        if(data.length == 0){
+        if(data == undefined){
             connection.query('insert into user values (null, ?, ?, ?, "", ?, ?)', 
             [phone, password, username, token, created_at], function (err, data) {
                 res.send('注册成功')
@@ -65,36 +65,40 @@ app.post('/api/register', function (req, res) {
 })
 
 
-// app.post('/api/login', function (req, res) {
-//     var phone = req.body.phone;
-//     var password = req.body.password;
-//     connection.query('select * from user where phone=? and password=? limit 1', [phone, password], function (err, data) {
-//         res.cookie('user_id', data[0].id);
-//         res.cookie('username', data[0].username);
-//         if (data.length > 0) {
-//             var token = phone + password + new Date().getTime() + Math.random();
-//             connection.query('update user as t set t.token = ? where phone =?', [token, phone], function (err, data) {
-//                 res.cookie('token', token)
-//                 res.render('HomePage.html');
-//             })
+app.post('/api/login', function (req, res) {
+    var phone = req.body.phone;
+    var password = req.body.password;
 
-//         } else {
-//             res.send('对不起，用户名或密码错误')
-//         }
-//     })
-// })
+    connection.query('select * from user where phone=? and password=? limit 1', [phone, password], function (err, data) {
 
-// app.post('/api/OKR', function (req, res) {
-//     var O = req.body.O;
-//     var K = req.body.K;
-//     var R = req.body.R;
-//     var id = req.cookies.id
-//     var created_at = moment().format('YYYY-MM-DD HH:mm:ss');
+        res.cookie('user_id', data[0].id);
+        res.cookie('username', data[0].username);
+        if (data.length != 0) {
+        
+            var token = phone + password + new Date().getTime() + Math.random();
+            connection.query('update user as t set t.token = ? where phone =?', [token, phone], function (err, data) {
+                res.cookie('token', token)
+                res.send('登录成功');
+            })
 
-//     connection.query('insert into okr values (null, ?, ?, ?, ?, ?)', [O, K, R, id, created_at], function (err, data) {
-//         res.render('HomePage.html');
-//     })
-// })
+        } else {
+            res.send('对不起，用户名或密码错误')
+        }
+    })
+})
+
+app.post('/api/OKR', function (req, res) {
+    var O = req.body.O;
+    var K = req.body.K;
+    var R = req.body.R;
+    var id = req.cookies.id
+    var created_at = moment().format('YYYY-MM-DD HH:mm:ss');
+
+    connection.query('insert into okr values (null, ?, ?, ?, ?, ?)', [O, K, R, id, created_at], function (err, data) {
+        res.send('发布成功');
+    })
+})
+
 // app.post('/api/comment', function (req, res) {
 //     var comment = req.body.comment;
 //     var userid = req.body.user_id;
