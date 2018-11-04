@@ -99,16 +99,16 @@ app.post('/api/OKR', function (req, res) {
     })
 })
 
-// app.post('/api/comment', function (req, res) {
-//     var comment = req.body.comment;
-//     var userid = req.body.user_id;
-//     var okrid = req.body.okr_id;
-//     var created_at = moment().format('YYYY-MM-DD HH:mm:ss');
+app.post('/api/comment', function (req, res) {
+    var comment = req.body.comment;
+    var userid = req.body.user_id;
+    var okrid = req.body.okr_id;
+    var created_at = moment().format('YYYY-MM-DD HH:mm:ss');
 
-//     connection.query('insert into comment values (null, ?, ?, ?, ?)', [okrid, userid, comment, created_at], function (err, data) {
-//         res.send('评论成功')
-//     })
-// })
+    connection.query('insert into comment values (null, ?, ?, ?, ?)', [okrid, userid, comment, created_at], function (err, data) {
+        res.send('评论成功')
+    })
+})
 
 
 app.get('/api/homepage', function (req, res) {
@@ -120,7 +120,7 @@ app.get('/api/homepage', function (req, res) {
                     (select avatar from user where user.id = okr.user_id) as avatar
                     from okr limit ?, ?`, [(page - 1) * size, size], function (err, data) {
             var username = req.cookies.username;
-            res.json({ okr: data });
+            res.json({ okr: data ,username:username});
         })
 });
 

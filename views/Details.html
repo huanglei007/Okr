@@ -383,6 +383,14 @@
             bottom: 10px;
             left: 55px;
         }
+        .pinglun{
+            margin-left: 10px;
+            text-decoration:none;
+        }
+        .pinglundiv{
+            background-color: grey;
+            width: 40px;
+        }
     </style>
 </head>
 
@@ -404,10 +412,12 @@
             </div>
             <div class="B">
                 <div class="PL">评论()</div>
-                <form action="/api/comment" method="POST">
-                    <div><input name="comment" class="input" type="text" placeholder="请输入你的评论内容……" autocomplete="off"></div>
-                    <div><input type="submit" value="评论"></div>
-                </form>
+
+                    <div><input name="comment" class="input" type="text" placeholder="请输入你的评论内容……" autocomplete="off" >
+                        <a class="pinglun"><div class="pinglundiv">评论</div></a>
+                    </div>
+                    
+
                 <div class="word" id="comments"></div>
                 <div class="More"><a>查看更多</a></div>
             </div>
@@ -523,8 +533,8 @@
             $('#sb').addClass("null")
         })
 
-//---------------------------------------------
-//---------------------------------------------
+        //---------------------------------------------
+        //---------------------------------------------
 
         $('.kaiO').click(function () {
             $('.O1').toggleClass('extend')
@@ -538,7 +548,7 @@
                 $(this).text('展开')
             }
         })
-        
+
         $('.kaiK').click(function () {
             $('.K1').toggleClass('extend')
 
@@ -551,7 +561,7 @@
                 $(this).text('展开')
             }
         })
-        
+
         $('.kaiR').click(function () {
             $('.R1').toggleClass('extend')
 
@@ -564,11 +574,11 @@
                 $(this).text('展开')
             }
         })
- 
+
     </script>
 
     <script>
-     var $t = $('#template');
+        var $t = $('#template');
         var tContent = $t.text();
         function getQueryFromUrl(key, url) {
             var arr = url.split('/');
@@ -579,14 +589,37 @@
         var id = getQueryFromUrl('id', window.location.href);
 
         $.get('/api/details/' + id, function (res) {
-            var html = Mustache.render(tContent, {details:res});
+            var html = Mustache.render(tContent, { details: res });
             $('#details').append(html);
         })
 
         $.get('/api/comments/' + id, function (res) {
-            var html = Mustache.render(tContent, {comments:res});
+            var html = Mustache.render(tContent, { comments: res });
             $('#comments').append(html);
+        })
+
+
+        $('.pinglun').click(function () {
+            var comment = $('.input').val();
+
+            $.ajax({
+                type: "POST",  //提交方式  
+                url: "/api/comment",//路径  
+                dataType: "text",
+                data: { comment:comment },//数据，这里使用的是Json格式进行传输  
+
+                success: function (data) {//返回数据根据结果进行相应的处理  
+                    if (data == "评论成功") {
+                        alert("评论成功")
+                        // window.location.href = "http://localhost:3000/api/details/" + id;
+                    } else {
+                        alert("对不起,用户名或密码已被占用");
+                    }
+                }
+            });
+
         })
     </script>
 </body>
+
 </html>
