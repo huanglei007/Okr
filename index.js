@@ -107,26 +107,30 @@ app.post('/api/comment', function (req, res) {
 })
 
 
-app.get('/api/homepage', function (req, res) {
+app.get('/api/homepage/:page', function (req, res) {
     res.cookie("test", "value");
-    var page = req.query.page || 1;
-    var size = 10;
+    var page = req.params.page;
+    var size = 4;
     connection.query(`select *,
                     (select username from user where user.id = okr.user_id) as username,
                     (select avatar from user where user.id = okr.user_id) as avatar
                     from okr limit ?, ?`, [(page - 1) * size, size], function (err, data) {
             var username = req.cookies.username;
-            res.json({ okr: data ,username:username});
+            res.json({ okr: data, username:username });
         })
 });
 
 app.get('/api/details/:id', function (req, res) {
     var okr_id = req.params.id;
+
     connection.query(`select *,
                     (select username from user where id=okr.user_id) as username,
-                    (select avatar from user where user.id = okr.user_id) as avatar 
+                    (select avatar from user where user.id = okr.user_id) as avatar,
+                    (select id from user where id = okr.user_id) as id 
                     from okr where id=?`, [okr_id], function (err, data) {
-            res.json({ details: data });
+            var username = req.cookies.username;
+            var id = req.cookies.user_id;
+            res.json({ details: data, username:username, id: id });
         });
 });
 
@@ -147,8 +151,8 @@ app.get('/api/comments/:id', function (req, res) {
 app.get('/api/user/:id', function (req, res) {
     var id = req.params.id;
     connection.query('select * from user where id=? limit 1', [id], function (err, data) {
-        // console.log('data: ', data);
-        res.json({user: data})
+        var username = req.cookies.username;
+        res.json({user: data, username:username })
     });
 });
 app.get('/api/userokr/:id', function (req, res){

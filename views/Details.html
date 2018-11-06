@@ -391,6 +391,17 @@
             background-color: grey;
             width: 40px;
         }
+        .username{
+            position:absolute;
+            top: 20px;
+            right: 400px;
+        }
+        .contentdiv{
+            border-radius: 0px;
+            border-bottom: 1px solid #F3F3F3;
+            width: 95%;
+            margin-top: 3px;
+        }
     </style>
 </head>
 
@@ -427,10 +438,13 @@
 
     {% raw %}
     <script type="template" id="template">
+    {{#username}}
+        <a href="/user/{{id}}" class="username">{{username}}</a>
+    {{/username}}
     {{#details}}
         <div class="a">
             <img class="img1">
-            <a class="aname" target="_blank">{{username}}</a>
+            <a class="aname" href="/user/{{user_id}}">{{username}}</a>
             <span style="float:right;margin-top: 3%;margin-right: 1%;">{{created_at}}</span>
         </div>
         <div class="b">
@@ -456,21 +470,18 @@
             <div class="R1">{{action}}</div>
         </div>
     {{/details}}
-    </script>
-    {% endraw %}
-
-    {% raw %}
-    <script type="template" id="template">
     {{#comments}}
-        <div></div>
+    
         <div>
             <img class="img1">
-            <a href="/Details/{{id}}" target="_blank">{{username}}</a>
+            <a href="/user/{{user_id}}" style="text-decoration:none;">{{username}}</a>
         </div>
         <div style="margin-left:10px;">{{content}}</div>
+        <div class="contentdiv"></div>
     {{/comments}}
     </script>
     {% endraw %}
+
 
 
 
@@ -485,19 +496,16 @@
         <div id="sa" class="null">
             <div class="sa1">登录<img src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4"
                     class="close1"></div>
-            <form action="/api/login" method="POST">
                 <div><input class="sinput" type="text" name="phone" placeholder="手机号或邮箱"></div>
                 <div><input class="sinput" type="text" name="password" placeholder="密码" autocomplete="off"></div>
                 <a class="wang" href="">忘记密码?</a>
                 <div class="sa2">登录</div>
                 <input type="submit" value="登录">
                 <div class="sadown">没有账号? <a class="id2">注册</a></div>
-            </form>
         </div>
         <div id="sb" class="null">
             <div class="sb1">注册<img src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4"
                     class="close2"></div>
-            <form action="/api/register" method="POST">
                 <div><input class="sinput" type="text" name="phone" placeholder="手机号或邮箱"></div>
                 <div><input class="sinput" type="text" name="password" placeholder="请输入你的密码"></div>
                 <div><input class="sinput1" type="text" name="code" placeholder="请输入6位数的验证码"></div>
@@ -505,12 +513,20 @@
                 <div class="sb2">注册</div>
                 <input type="submit" value="注册">
                 <div class="sbdown">没有账号? <a class="id1">登录</a></div>
-            </form>
+
         </div>
     </div>
 
 
     <script type='text/javascript'>
+        function jiancha(){
+            var cookie = document.cookie;
+            var arr = cookie.split(';')
+            if(arr.length > 2){
+                $('.ID').hide()
+            }
+        }
+        jiancha()
 
         $('.id1').click(function () {
             $('#hidebg').removeClass("null")
@@ -589,12 +605,13 @@
         var id = getQueryFromUrl('id', window.location.href);
 
         $.get('/api/details/' + id, function (res) {
-            var html = Mustache.render(tContent, { details: res });
+            console.log(res)
+            var html = Mustache.render(tContent, res);
             $('#details').append(html);
         })
 
         $.get('/api/comments/' + id, function (res) {
-            var html = Mustache.render(tContent, { comments: res });
+            var html = Mustache.render(tContent, res);
             $('#comments').append(html);
         })
 
@@ -605,7 +622,7 @@
             $.ajax({
                 type: "POST",  //提交方式  
                 url: "/api/comment",//路径  
-                dataType: "text",
+                dataType: "josn",
                 data: { comment:comment },//数据，这里使用的是Json格式进行传输  
 
                 success: function (data) {//返回数据根据结果进行相应的处理  

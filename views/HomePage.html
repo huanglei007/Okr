@@ -321,6 +321,11 @@
             background-color:#4A90E2;
             width: 40px;
         }
+        .username{
+            position:absolute;
+            top: 20px;
+            right: 400px;
+        }
     </style>
 </head>
 
@@ -337,14 +342,17 @@
     </div>
 
     <div id="down">
-        <a href="">{{ username }}</a>
+        
         <div class="Release">
             <div class="Release1">
 
                 <div style="margin-top:10px;"><b>给自己定个小目标把</b></div>
-                <div class="Thing">o:<input type="text" name="O" id="input" class="O" placeholder="请输入你的内容……" autocomplete="off"></div>
-                <div class="Thing">K:<input type="text" name="K" id="input" class="K" placeholder="请输入你的内容……" autocomplete="off"></div>
-                <div class="Thing">R:<input type="text" name="R" id="input" class="R" placeholder="请输入你的内容……" autocomplete="off"></div>
+                <div class="Thing">o:<input type="text" name="O" id="input" class="O" placeholder="请输入你的内容……"
+                        autocomplete="off"></div>
+                <div class="Thing">K:<input type="text" name="K" id="input" class="K" placeholder="请输入你的内容……"
+                        autocomplete="off"></div>
+                <div class="Thing">R:<input type="text" name="R" id="input" class="R" placeholder="请输入你的内容……"
+                        autocomplete="off"></div>
                 <a style="text-decoration:none ;">
                     <div class="fabu">发布</div>
                 </a>
@@ -355,11 +363,14 @@
     </div>
     {% raw %}
     <script type="template" id="template">
+        {{#username}}
+            <a href="/user/{{user_id}}" class="username">{{username}}</a>
+        {{/username}}
         {{#okr}}
         <div class="A">
                 <div class="a">
                     <img class="img1">
-                    <a href="/user/{{id}}" target="_blank">{{username}}</a>
+                    <a href="/user/{{user_id}}">{{username}}</a>
                     <span style="float:right;margin-top: 3%;margin-right: 1%;">{{created_at}}</span>
                 </div>
                 <a  href="/details/{{id}}" style="text-decoration : none; color:black" >
@@ -409,6 +420,15 @@
 
 
     <script>
+        function jiancha(){
+            var cookie = document.cookie;
+            var arr = cookie.split(';')
+            if(arr.length > 2){
+                $('.ID').hide()
+            }
+        }
+        jiancha()
+
         $('.id1').click(function () {
             $('#hidebg').removeClass("null")
             $('#sa').removeClass("null")
@@ -419,7 +439,6 @@
             $('#sb').removeClass("null")
             $('#sa').addClass("null")
         })
-
 
 
         $('.close1').click(function () {
@@ -433,13 +452,53 @@
 
         var $t = $('#template');
         var tContent = $t.text();
+        var page = parseInt(getQueryFromUrl('page', window.location.search));
+        if (!page) {
+            page = 1
+        }
+        function getQueryFromUrl(key, url) {
+            var arr = url.split('/');
+            var queryObj = arr[4];
+            return queryObj;
+            
+        }
 
-        $.get('/api/homepage', function (res) {
+        $.get('/api/homepage/' + page, function (res) {
             var html = Mustache.render(tContent, res);
             $('#okr').append(html);
         })
+
+
+        // $(function () {
+        //     var totaheight = 0; //定义一个总高度变量
+        //     function ata() {
+        //         totaheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+
+        //         if ($(document).height() <= totaheight) {
+        //             var pageTotal = 0;
+        //             $.ajax({
+        //                 url: "/api/homepage/" + (page + 1),
+        //                 type: "get",
+        //                 async: false,
+        //                 dataType: "json",
+        //                 success: function (data) {
+        //                     pageTotal = data.pageTotal
+        //                 }
+        //             })
+        //             $('#okr').append(pageTotal);
+        //         }
+
+        //     }
+        //     $(window).scroll(function () {
+        //         // console.log("滚动条到顶部的垂直高度：" + $(window).scrollTop());
+        //         // console.log("页面的文档高度：" + $(document).height());
+        //         // console.log("浏览器的高度：" + $(window).height());
+        //         ata();
+        //     })
+        // })
+            
     </script>
-    
+
     <script>
 
         $('.sb2').click(function () {
@@ -476,8 +535,8 @@
 
                 success: function (data) {//返回数据根据结果进行相应的处理  
                     if (data == "登录成功") {
-                        alert("登录成功")
-                        // window.location.href = "http://localhost:3000/"
+                        alert("登录成功"),
+                        window.location.href = "http://localhost:3000/"
                     } else {
                         alert("对不起,用户名或密码错误");
                     }
@@ -490,15 +549,15 @@
             var O = $('.O').val();
             var K = $('.K').val();
             var R = $('.R').val();
-            console.log(O,K,R);
             $.ajax({
                 type: "POST",  //提交方式  
                 url: "/api/okr",//路径  
                 dataType: "text",
-                data: { O: O, K: K, R:R },//数据，这里使用的是Json格式进行传输  
+                data: { O: O, K: K, R: R },//数据，这里使用的是Json格式进行传输  
 
                 success: function (data) {//返回数据根据结果进行相应的处理  
                     if (data == "发布成功") {
+
                         alert('发布成功')
                         // window.location.href = "http://localhost:3000/"
                     } else {
@@ -508,6 +567,7 @@
             });
 
         })
+
     </script>
 </body>
 

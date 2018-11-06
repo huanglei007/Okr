@@ -149,6 +149,23 @@
             margin-left: 10px;
             border-bottom: 1px solid #F3F3F3;
         }
+        .username{
+            position:absolute;
+            top: 20px;
+            right: 400px;
+        }
+        #userokr{
+            margin-left: 5px;
+            margin-top: 10px;
+            height: 40px;
+            text-decoration:none;
+        }
+        .okrdiv{
+            border-radius: 0px;
+            border-bottom: 1px solid #F3F3F3;
+            width: 95%;
+            margin-top: 3px;
+        }
     </style>
 </head>
 
@@ -169,11 +186,17 @@
                 <div class="hc"><img src="{{user.avatar}}" class="hd"></div>
             </div>
             <div class="hb">
-                <div class="he" id="user">
-
-                </div>
+                <div class="he" id="user"></div>
             </div>
             <button class="hf">编辑个人资料</button>
+        </div>
+    </div>
+    
+
+    <div id="Lower">
+        <div class="body">
+            <div class="ba">Okr</div>
+            <div id="userokr"> </div>
         </div>
     </div>
     {% raw %}
@@ -181,32 +204,29 @@
         {{#user}}
             <a>{{username}}</a>
         {{/user}}
-    </script>
-    {% endraw %}
 
-    <div id="Lower">
-        <div class="body">
-            <div class="ba">Okr</div>
-            <div id="userokr">
-
-            </div>
-        </div>
-    </div>
-    {% raw %}
-    <script type="template" id="templates">
         {{#userokr}}
-            <a href="/details/{{id}}">{{object}}</a>
+        <div style="height:80%;"> 
+            <div><a href="/details/{{id}}" id="userokr">{{object}}</a></div>    
+            <div class="okrdiv"></div>   
+        </div>
         {{/userokr}}
     </script>
     {% endraw %}
 
 
     <script>
+        function jiancha(){
+            var cookie = document.cookie;
+            var arr = cookie.split(';')
+            if(arr.length > 2){
+                $('.ID').hide()
+            }
+        }
+        jiancha()
+
         var $t = $('#template');
         var tContent = $t.text();
-
-        var $ts = $('#templates');
-        var tContents = $ts.tetx();
 
         function getQueryFromUrl(key, url) {
             var arr = url.split('/');
@@ -217,11 +237,11 @@
         var id = getQueryFromUrl('id', window.location.href);
 
         $.get('/api/user/' + id, function (res) {
-            var html = Mustache.render(tContent, { user: res });
+            var html = Mustache.render(tContent, res);
             $('#user').append(html);
         })
         $.get('/api/userokr/' + id, function (res) {
-            var html = Mustache.render(tContents, { userokr: res });
+            var html = Mustache.render(tContent,  res);
             $('#userokr').append(html);
         })
 
