@@ -35,13 +35,9 @@ app.get('/details/:id', function (req, res) {
 })
 
 
-// app.get('/user/:id', function (req, res) {
-//     var id = req.params.id;
-//     connection.query('select * from user where id=? limit 1', [id], function (err, data) {
-//         // console.log('data: ', data);
-//         res.render('User.html', { user: data })
-//     });
-// })
+app.get('/user/:id', function (req, res) {
+        res.render('User.html')
+})
 
 
 app.post('/api/register', function (req, res) {
@@ -87,7 +83,7 @@ app.post('/api/login', function (req, res) {
     })
 })
 
-app.post('/api/OKR', function (req, res) {
+app.post('/api/okr', function (req, res) {
     var O = req.body.O;
     var K = req.body.K;
     var R = req.body.R;
@@ -148,14 +144,19 @@ app.get('/api/comments/:id', function (req, res) {
 });
 
 
-// app.get('/api/user', function (req, res) {
-//     var id = req.params.id;
-//     connection.query('select * from user where id=? limit 1', [id], function (err, data) {
-//         // console.log('data: ', data);
-//         res.json(data)
-//     });
-// });
-
+app.get('/api/user/:id', function (req, res) {
+    var id = req.params.id;
+    connection.query('select * from user where id=? limit 1', [id], function (err, data) {
+        // console.log('data: ', data);
+        res.json({user: data})
+    });
+});
+app.get('/api/userokr/:id', function (req, res){
+    var id = req.params.id;
+    connection.query('select * from okr where user_id=? ', [id], function(err, data){
+        res.json({userokr: data})
+    })
+})
 
 
 

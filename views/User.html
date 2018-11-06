@@ -142,7 +142,7 @@
             padding-top: 10px;
         }
 
-        .body p{
+        .body p {
             width: auto;
             height: 10px;
             line-height: 45px;
@@ -153,7 +153,9 @@
 </head>
 
 <body>
-    
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/mustache.js/2.3.0/mustache.min.js"></script>
+
     <div id="Up">
         <div class="okr">Okr</div>
         <div class="id">
@@ -167,23 +169,63 @@
                 <div class="hc"><img src="{{user.avatar}}" class="hd"></div>
             </div>
             <div class="hb">
-                <div class="he">{{user.username}}</div>
+                <div class="he" id="user">
+
+                </div>
             </div>
             <button class="hf">编辑个人资料</button>
         </div>
     </div>
-
+    {% raw %}
+    <script type="template" id="template">
+        {{#user}}
+            <a>{{username}}</a>
+        {{/user}}
+    </script>
+    {% endraw %}
 
     <div id="Lower">
         <div class="body">
             <div class="ba">Okr</div>
-            {% for item in items %}
-            <div>
-                {{ item.okr }}
+            <div id="userokr">
+
             </div>
-            {% endfor %}
         </div>
     </div>
+    {% raw %}
+    <script type="template" id="templates">
+        {{#userokr}}
+            <a href="/details/{{id}}">{{object}}</a>
+        {{/userokr}}
+    </script>
+    {% endraw %}
+
+
+    <script>
+        var $t = $('#template');
+        var tContent = $t.text();
+
+        var $ts = $('#templates');
+        var tContents = $ts.tetx();
+
+        function getQueryFromUrl(key, url) {
+            var arr = url.split('/');
+            var queryObj = arr[4];
+            return queryObj;
+        }
+
+        var id = getQueryFromUrl('id', window.location.href);
+
+        $.get('/api/user/' + id, function (res) {
+            var html = Mustache.render(tContent, { user: res });
+            $('#user').append(html);
+        })
+        $.get('/api/userokr/' + id, function (res) {
+            var html = Mustache.render(tContents, { userokr: res });
+            $('#userokr').append(html);
+        })
+
+    </script>
 </body>
 
 </html>

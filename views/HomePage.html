@@ -359,7 +359,7 @@
         <div class="A">
                 <div class="a">
                     <img class="img1">
-                    <a href="/user/:{{id}}" target="_blank">{{username}}</a>
+                    <a href="/user/{{id}}" target="_blank">{{username}}</a>
                     <span style="float:right;margin-top: 3%;margin-right: 1%;">{{created_at}}</span>
                 </div>
                 <a  href="/details/{{id}}" style="text-decoration : none; color:black" >
@@ -493,7 +493,7 @@
             console.log(O,K,R);
             $.ajax({
                 type: "POST",  //提交方式  
-                url: "/api/OKR",//路径  
+                url: "/api/okr",//路径  
                 dataType: "text",
                 data: { O: O, K: K, R:R },//数据，这里使用的是Json格式进行传输  
 
